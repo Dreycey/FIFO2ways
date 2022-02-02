@@ -1,27 +1,19 @@
 # FIFO2ways
 implimenting FIFO in 2 ways
 
+## How to use
+Below are instructions for building/compiling the package and running the test cases.
 
-multi-threading in C
+* To compile:
+```
+make;
+```
 
-X Linked Lists in C
+* to clean
+```
+make clean;
+```
 
-X Linked List FIFO
+## CODE
 
-circular buffer 
-
-X Malloc
-
-X Free
-
-X Structs vs Enums
-
-X Pointers
-
-X casting
-
-X static allocation in C
-
-compiling header files
-
-watcch lectures again, look at his test function example, watch lecture on circular buffer from last lecture
+code.md
