@@ -31,7 +31,7 @@ int test_cbfifo() {
     }
     number_added = cbfifo_enqueue(single_char, 1);
     printf("number added: %ld \n", number_added);
-    assert(number_added == 0); // should be one less than max
+    assert(number_added == 0);
 
     // return 0 if all pass
     return 0;
