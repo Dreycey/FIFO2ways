@@ -20,10 +20,23 @@
  */
 typedef struct llfifo_s llfifo_t;
 
+
+/*
+* return number of times malloc() called 
+*/
+int llfifo_memory_used(llfifo_t * llQ);
+
+/*
+* return number of times free() called 
+*/
+int llfifo_memory_freed(llfifo_t * llQ);
+
 /* 
  * White-box testing function 
  *
  * White box testing that allows for lookng inside the Q
+ * Parameters:
+ *      ptr to the LLFIFO
  */
 int validate_llfifo(llfifo_t* llQ);
 

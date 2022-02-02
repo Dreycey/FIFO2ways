@@ -18,8 +18,21 @@ struct llfifo_s {
     int capacity;
     int length;
     struct Node* head;
+    int malloc_calls;
+    int free_calls;
 };
 
+/* check header for usage */
+int llfifo_memory_used(llfifo_t * llQ) {
+    return llQ->malloc_calls;
+}
+
+/* check header for usage */
+int llfifo_memory_freed(llfifo_t * llQ) {
+    return llQ->free_calls;
+}
+
+/* check header for usage */
 llfifo_t *llfifo_create(int capacity) {
     if (capacity < 0) {return NULL;}
 
@@ -29,6 +42,7 @@ llfifo_t *llfifo_create(int capacity) {
     llQueue->initial_capacity = capacity;
     llQueue->length = 0;
     llQueue->head = (struct Node *)malloc(sizeof(struct Node) * (capacity)); //init size
+    llQueue->malloc_calls++;
     //if (llQueue->head == NULL) {return NULL;} // If Null ptr returned
 
     /* Build initial Linked List*/
@@ -48,6 +62,7 @@ llfifo_t *llfifo_create(int capacity) {
     return llQueue;
 }
 
+/* check header for usage */
 int llfifo_enqueue(llfifo_t *fifo, void *element) {
     if (element == NULL) {return -1;}
 
@@ -62,7 +77,8 @@ int llfifo_enqueue(llfifo_t *fifo, void *element) {
         fifo->length++;
     }
     else {
-        struct Node* curr_node = (struct Node *)malloc(sizeof(struct Node)); 
+        struct Node* curr_node = (struct Node *)malloc(sizeof(struct Node));
+        fifo->malloc_calls++;
         // add new node to end of linked list
         while (node->next != NULL) {
             node = node->next;
@@ -73,9 +89,10 @@ int llfifo_enqueue(llfifo_t *fifo, void *element) {
         fifo->length++;
         fifo->capacity++;
     }
-    return 0;
+    return fifo->length;
 }
 
+/* check header for usage */
 void *llfifo_dequeue(llfifo_t *fifo) {
     if (fifo->length == 0) {return NULL;} // if empty
     struct Node* prev_node;
@@ -92,15 +109,20 @@ void *llfifo_dequeue(llfifo_t *fifo) {
     return result_ptr;  
 }
 
+/* check header for usage */
 int llfifo_length(llfifo_t *fifo) {
     return fifo->length;
 }
 
+/* check header for usage */
 int llfifo_capacity(llfifo_t *fifo) {
     return fifo->capacity;
 }
 
+/* check header for usage */
 void llfifo_destroy(llfifo_t *fifo) {
+    if (fifo == NULL) // if null ptr
+        return;
     struct Node* node = fifo->head;
     struct Node* prev_node;
     int count = 0;
@@ -109,14 +131,18 @@ void llfifo_destroy(llfifo_t *fifo) {
         node = node->next;
         if (count > fifo->initial_capacity) {
             free(prev_node);
+            fifo->free_calls++;
         }
         count++;
     }
-    if (fifo->head != NULL)
+    if (fifo->head != NULL) {
         free(fifo->head); // Free initial cacpacity allocted last
+        fifo->free_calls++;
+    }
     free(fifo);
 }
 
+/* check header for usage */
 int validate_llfifo(llfifo_t* llQ){
     printf("\n\nINFORMATION ON THE LLFIFO \n");
     printf("\t 1. Here is the current length: %d \n", llQ->length);
